@@ -1,8 +1,15 @@
 import React from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native';
+import { useNavigation, RouteProp } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 
-export default function InvestmentPlanScreen({ route }) {
+type InvestmentPlanScreenRouteParams = {
+	level: string;
+  };
+
+export default function InvestmentPlanScreen({route}) {
+	const navigation = useNavigation();
     // Can access the experience level through route.params.level
     return (
 	<SafeAreaView style={{ flex: 1, backgroundColor: '#FFDE59' }}>
@@ -11,6 +18,10 @@ export default function InvestmentPlanScreen({ route }) {
 		<TextInput placeholder="Stocks" keyboardType="numeric" />
 		<TextInput placeholder="Bonds" keyboardType="numeric" />
 		<TextInput placeholder="Savings" keyboardType="numeric" />
+		{/* @ts-ignore */}
+		<TouchableOpacity onPress={() => navigation.navigate('FeedbackScreen')}>
+		    <Text>Submit</Text>
+		</TouchableOpacity>
 	    </View>
 	</SafeAreaView>
     );

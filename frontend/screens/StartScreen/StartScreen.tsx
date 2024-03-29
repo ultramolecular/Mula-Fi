@@ -40,7 +40,7 @@ export default function StartScreen({ navigation }) {
                     {/* Advanced button */}
                     <TouchableOpacity
                         style={styles.difficultyTouchable}
-                        onPress={() => navigation.navigate('InvestmentPlanScreen', { level: 'Intermediate' })}
+                        onPress={() => navigation.navigate('InvestmentPlanScreen', { level: 'Advanced' })}
                     >
                         <View style={styles.difficultyView}>
                             <Text style={styles.difficultyText}>Advanced</Text>
