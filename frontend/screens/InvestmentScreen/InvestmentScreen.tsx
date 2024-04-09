@@ -1,36 +1,123 @@
-import React from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
-import { SafeAreaView } from 'react-native';
-import { useNavigation, RouteProp } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import React, { useState, useMemo } from 'react';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import Slider from '@react-native-community/slider';
 
-type InvestmentPlanScreenRouteParams = {
-	level: string;
-  };
+export default function InvestmentPlanScreen({ route }) {
+  const navigation = useNavigation();
+  const { level } = route.params;
 
-export default function InvestmentPlanScreen({route}) {
-	const navigation = useNavigation();
-    // Can access the experience level through route.params.level
-    return (
-	<SafeAreaView style={{ flex: 1, backgroundColor: '#FFDE59' }}>
-	    <View style={styles.container}>
-		<Text>Investment Plan for {route.params.level}</Text>
-		<TextInput placeholder="Stocks" keyboardType="numeric" />
-		<TextInput placeholder="Bonds" keyboardType="numeric" />
-		<TextInput placeholder="Savings" keyboardType="numeric" />
-		{/* @ts-ignore */}
-		<TouchableOpacity onPress={() => navigation.navigate('FeedbackScreen')}>
-		    <Text>Submit</Text>
-		</TouchableOpacity>
-	    </View>
-	</SafeAreaView>
-    );
+  // State for input values
+  const [stocks, setStocks] = useState(40);
+  const [bonds, setBonds] = useState(30);
+  const [savings, setSavings] = useState(30);
+
+  // Calculate the total percentage
+  const totalPercentage = useMemo(() => stocks + bonds + savings, [stocks, bonds, savings]);
+
+  return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#FFDE59' }}>
+      <View style={styles.container}>
+        <Text style={styles.header}>Investment Plan for {level}</Text>
+
+        <View style={styles.sliderContainer}>
+          <Text style={styles.label}>Stocks (%): {stocks}</Text>
+          <Slider
+            style={styles.slider}
+            minimumValue={0}
+            maximumValue={100}
+            step={1}
+            value={stocks}
+            onValueChange={setStocks}
+            minimumTrackTintColor="#307ecc"
+            maximumTrackTintColor="#000000"
+          />
+        </View>
+
+        <View style={styles.sliderContainer}>
+          <Text style={styles.label}>Bonds (%): {bonds}</Text>
+          <Slider
+            style={styles.slider}
+            minimumValue={0}
+            maximumValue={100}
+            step={1}
+            value={bonds}
+            onValueChange={setBonds}
+            minimumTrackTintColor="#307ecc"
+            maximumTrackTintColor="#000000"
+          />
+        </View>
+
+        <View style={styles.sliderContainer}>
+          <Text style={styles.label}>Savings (%): {savings}</Text>
+          <Slider
+            style={styles.slider}
+            minimumValue={0}
+            maximumValue={100}
+            step={1}
+            value={savings}
+            onValueChange={setSavings}
+            minimumTrackTintColor="#307ecc"
+            maximumTrackTintColor="#000000"
+          />
+        </View>
+
+        <Text style={styles.totalLabel}>Total: {totalPercentage}%</Text>
+        <TouchableOpacity 
+          style={[styles.submitButton, totalPercentage === 100 ? styles.activeButton : styles.disabledButton]}
+          onPress={() => navigation.navigate('FeedbackScreen')}
+          disabled={totalPercentage !== 100}
+        >
+          <Text style={styles.submitButtonText}>Submit</Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
+  );
 }
 
 const styles = StyleSheet.create({
-    container: {
-	flex: 1,
-	alignItems: 'center',
-	justifyContent: 'center',
-    }
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+  },
+  header: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  sliderContainer: {
+    width: '100%',
+    marginBottom: 20,
+  },
+  label: {
+    fontSize: 18,
+    marginBottom: 10,
+  },
+  slider: {
+    width: '100%',
+    height: 40,
+  },
+  totalLabel: {
+    fontSize: 18,
+    marginTop: 20,
+  },
+  submitButton: {
+    marginTop: 20,
+    padding: 10,
+    borderRadius: 5,
+    width: 200,
+    alignItems: 'center',
+  },
+  submitButtonText: {
+    color: 'white',
+    fontSize: 18,
+  },
+  activeButton: {
+    backgroundColor: '#007BFF',
+  },
+  disabledButton: {
+    backgroundColor: '#aaa',
+  },
 });

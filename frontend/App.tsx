@@ -6,7 +6,9 @@ import { createStackNavigator } from "@react-navigation/stack";
 import StartScreen from "./screens/StartScreen/StartScreen";
 import InvestmentPlanScreen from "./screens/InvestmentScreen/InvestmentScreen";
 import FeedbackScreen from "./screens/Feedback/FeedbackScreen";
+import OnboardingPages from "./screens/Onboarding/OnboardingPages";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import SurveyQuestions from "./screens/Survey Questions/SurveryQuestions";
 
 const Stack = createStackNavigator();
 
@@ -14,16 +16,26 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="StartScreen">
+        <Stack.Navigator initialRouteName="OnboardingPages">
+          <Stack.Screen
+            name="OnboardingPages"
+            component={OnboardingPages}
+            options={{ headerShown: false }}
+          />
           <Stack.Screen
             name="StartScreen"
             component={StartScreen}
             options={{ headerShown: false }}
           />
           <Stack.Screen
+            name="SurveyQuestions"
+            component={SurveyQuestions}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
             name="InvestmentPlanScreen"
             component={InvestmentPlanScreen}
-            options={{ title: "Investment Plan" }}
+            options={{ headerTransparent: true, title: "Investment Plan"}}
           />
           <Stack.Screen
             name="FeedbackScreen"

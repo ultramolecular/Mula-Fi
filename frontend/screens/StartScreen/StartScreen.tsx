@@ -1,7 +1,9 @@
 import { View, Text, SafeAreaView, TouchableOpacity, StyleSheet, Image } from "react-native";
+// @ts-ignore
 import mulaLogo from "../../assets/mula-logo-2.png";
 import React from "react";
 
+//@ts-ignore
 export default function StartScreen({ navigation }) {
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor:'#FFDE59' }}>
@@ -22,7 +24,7 @@ export default function StartScreen({ navigation }) {
                     {/* Novice button */}
                     <TouchableOpacity
                         style={styles.difficultyTouchable}
-                        onPress={() => navigation.navigate('InvestmentPlanScreen', { level: 'Novice' })}
+                        onPress={() => navigation.navigate('SurveyQuestions')}
                     >
                         <View style={styles.difficultyView}>
                             <Text style={styles.difficultyText}>Novice</Text>
@@ -31,7 +33,7 @@ export default function StartScreen({ navigation }) {
                     {/* Intermediate button */}
                     <TouchableOpacity
                         style={styles.difficultyTouchable}
-                        onPress={() => navigation.navigate('InvestmentPlanScreen', { level: 'Intermediate' })}
+                        onPress={() => navigation.navigate('SurveyQuestions')}
                     >
                         <View style={styles.difficultyView}>
                             <Text style={styles.difficultyText}>Intermediate</Text>
@@ -40,7 +42,8 @@ export default function StartScreen({ navigation }) {
                     {/* Advanced button */}
                     <TouchableOpacity
                         style={styles.difficultyTouchable}
-                        onPress={() => navigation.navigate('InvestmentPlanScreen', { level: 'Advanced' })}
+                        // onPress={() => navigation.navigate('InvestmentPlanScreen', { level: 'Advanced' })}
+                        onPress={() => navigation.navigate('SurveyQuestions')}
                     >
                         <View style={styles.difficultyView}>
                             <Text style={styles.difficultyText}>Advanced</Text>
