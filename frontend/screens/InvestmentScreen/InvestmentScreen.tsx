@@ -2,10 +2,11 @@ import React, { useState, useMemo } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Slider from '@react-native-community/slider';
+import axios from 'axios';
 
 export default function InvestmentPlanScreen({ route }) {
   const navigation = useNavigation();
-  const { level } = route.params;
+  const { level, goals, portfolioSize, monthlyContribution } = route.params;
 
   // State for input values
   const [stocks, setStocks] = useState(40);
@@ -14,6 +15,25 @@ export default function InvestmentPlanScreen({ route }) {
 
   // Calculate the total percentage
   const totalPercentage = useMemo(() => stocks + bonds + savings, [stocks, bonds, savings]);
+
+  const handleSubmit = async () => {
+    try {
+      // TODO: Figure out how to make API calls without localhost, prob set up an actual backend hosted server?
+      const response = await axios.post('http://192.168.1.129:5000/get-investment-feedback', {
+        experience: level,
+        goals: goals,
+        portfolio_size: portfolioSize,
+        monthly_contribution: monthlyContribution,
+        stocks,
+        bonds,
+        savings
+      });
+      // Navigate to the Feedback screen with the received advice
+      navigation.navigate('FeedbackScreen', { advice: response.data.advice });
+    } catch (error) {
+      console.error('Failed to fetch investment advice:', error);
+    }
+};
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#FFDE59' }}>
@@ -65,7 +85,7 @@ export default function InvestmentPlanScreen({ route }) {
         <Text style={styles.totalLabel}>Total: {totalPercentage}%</Text>
         <TouchableOpacity 
           style={[styles.submitButton, totalPercentage === 100 ? styles.activeButton : styles.disabledButton]}
-          onPress={() => navigation.navigate('FeedbackScreen')}
+          onPress={handleSubmit}
           disabled={totalPercentage !== 100}
         >
           <Text style={styles.submitButtonText}>Submit</Text>

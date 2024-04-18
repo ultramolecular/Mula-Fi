@@ -24,7 +24,7 @@ export default function StartScreen({ navigation }) {
                     {/* Novice button */}
                     <TouchableOpacity
                         style={styles.difficultyTouchable}
-                        onPress={() => navigation.navigate('SurveyQuestions')}
+                        onPress={() => navigation.navigate('SurveyQuestions', {level: 'novice'})}
                     >
                         <View style={styles.difficultyView}>
                             <Text style={styles.difficultyText}>Novice</Text>
@@ -33,7 +33,7 @@ export default function StartScreen({ navigation }) {
                     {/* Intermediate button */}
                     <TouchableOpacity
                         style={styles.difficultyTouchable}
-                        onPress={() => navigation.navigate('SurveyQuestions')}
+                        onPress={() => navigation.navigate('SurveyQuestions', {level: 'intermediate'})}
                     >
                         <View style={styles.difficultyView}>
                             <Text style={styles.difficultyText}>Intermediate</Text>
@@ -43,7 +43,7 @@ export default function StartScreen({ navigation }) {
                     <TouchableOpacity
                         style={styles.difficultyTouchable}
                         // onPress={() => navigation.navigate('InvestmentPlanScreen', { level: 'Advanced' })}
-                        onPress={() => navigation.navigate('SurveyQuestions')}
+                        onPress={() => navigation.navigate('SurveyQuestions', {level: 'advanced'})}
                     >
                         <View style={styles.difficultyView}>
                             <Text style={styles.difficultyText}>Advanced</Text>

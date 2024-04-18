@@ -2,9 +2,10 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-export default function FeedbackScreen() {
+export default function FeedbackScreen({ route }) {
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
+  const { advice } = route.params;
 
   return (
     <View style={styles.container}>
@@ -13,33 +14,10 @@ export default function FeedbackScreen() {
           Good Work! Here's where you can improve:
         </Text>
 
+        {/* Display advice received from OpenAI in our backend */}
         <Text style={styles.text}>
-          Diversification is key: Ensure your portfolio includes a mix of stocks from various industries to mitigate risk.
+          {advice}
         </Text>
-        <TouchableOpacity onPress={() => console.log("More info on Diversification")}>
-          <Text style={styles.link}>More info</Text>
-        </TouchableOpacity>
-
-        <Text style={styles.text}>
-          Consider long-term growth stocks over short-term fluctuations. Focus on companies with strong potential for growth.
-        </Text>
-        <TouchableOpacity onPress={() => console.log("More info on Growth Stocks")}>
-          <Text style={styles.link}>More info</Text>
-        </TouchableOpacity>
-
-        <Text style={styles.text}>
-          Review your asset allocation periodically: Your mix of stocks, bonds, and other investments should change as you get closer to your financial goals.
-        </Text>
-        <TouchableOpacity onPress={() => console.log("More info on Asset Allocation")}>
-          <Text style={styles.link}>More info</Text>
-        </TouchableOpacity>
-
-        <Text style={styles.text}>
-          Be mindful of fees: High investment fees can cut into your earnings significantly over time, so choose low-cost index funds when possible.
-        </Text>
-        <TouchableOpacity onPress={() => console.log("More info on Investment Fees")}>
-          <Text style={styles.link}>More info</Text>
-        </TouchableOpacity>
       </View>
 
       <TouchableOpacity style={styles.editPlanButton} onPress={() => navigation.navigate("InvestmentPlanScreen", { level: "Novice" })}>

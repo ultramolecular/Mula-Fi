@@ -10,7 +10,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
 
-export default function SurveyQuestions() {
+export default function SurveyQuestions({ route }) {
   const [selectedGoal, setSelectedGoal] = useState("null");
   const [selectedSize, setSelectedSize] = useState("null");
   const [selectedContribution, setSelectedContribution] = useState("null");
@@ -91,7 +91,12 @@ export default function SurveyQuestions() {
         <TouchableOpacity
           style={{ backgroundColor: "#0077cc", padding: 10, borderRadius: 5, }}
           onPress={() =>
-            navigation.navigate("InvestmentPlanScreen", { level: "Novice" })
+            navigation.navigate("InvestmentPlanScreen", {
+              level: route.params.level,
+              goals: selectedGoal,
+              portfolioSize: selectedSize,
+              monthlyContribution: selectedContribution
+            })
           }
         >
           <Text style={{ color: "white", textAlign: "center" }}>Submit</Text>
