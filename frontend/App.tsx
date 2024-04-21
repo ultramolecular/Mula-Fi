@@ -9,11 +9,14 @@ import FeedbackScreen from "./screens/Feedback/FeedbackScreen";
 import OnboardingPages from "./screens/Onboarding/OnboardingPages";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import SurveyQuestions from "./screens/Survey Questions/SurveryQuestions";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const Stack = createStackNavigator();
+const queryClient = new QueryClient();
 
 export default function App() {
   return (
+    <QueryClientProvider client={queryClient}>
     <SafeAreaProvider>
       <NavigationContainer>
         <Stack.Navigator initialRouteName="OnboardingPages">
@@ -45,5 +48,6 @@ export default function App() {
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
+    </QueryClientProvider>
   );
 }
