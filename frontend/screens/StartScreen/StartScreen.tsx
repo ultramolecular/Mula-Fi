@@ -1,15 +1,19 @@
 import { View, Text, SafeAreaView, TouchableOpacity, StyleSheet, Image } from "react-native";
 // @ts-ignore
-import mulaLogo from "../../assets/mula-logo-2.png";
 import React from "react";
 
 //@ts-ignore
 export default function StartScreen({ navigation }) {
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor:'#FFDE59' }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor:'#4894FE' }}>
+
+            <View style={styles.backgroundCircle} />
+            <View style={styles.backgroundEllipse} />
             <View style={{ justifyContent: "space-between", height:'100%' }}>
                 <View style={{ alignSelf: "center" }}>
-                    <Image source={mulaLogo} />
+                    <Text style={{ fontSize: 50, textAlign: "center", fontFamily: 'Poppins-Bold' , color:'white', padding: 10 }}>
+                        Welcome to MulaFi!
+                    </Text>
                 </View>
                 <View
                     style={{
@@ -18,7 +22,7 @@ export default function StartScreen({ navigation }) {
                       width: "80%",
                     }}
                 >
-                    <Text style={{ fontSize: 20, textAlign: "center", color:'red', padding: 10 }}>
+                    <Text style={{ fontSize: 20, textAlign: "center", color:'white', padding: 10 }}>
                         Please choose your experience level:
                     </Text>
                     {/* Novice button */}
@@ -63,14 +67,34 @@ const styles = StyleSheet.create({
         overflow: "hidden",
     },
     difficultyView: {
-        backgroundColor: "green",
+        backgroundColor: "white",
         borderRadius: 10,
         padding: 20,
     },
     difficultyText: {
-        color: "white",
+        color: "#4894FE",
         fontSize: 40,
-        fontFamily: "",
+        fontFamily: "Poppins-Regular",
         alignSelf: "center",
     },
+    backgroundCircle: {
+        position: 'absolute',
+        width: 500, // Diameter of the circle
+        height: 300, // Diameter of the circle
+        borderRadius: 100, // Half the diameter to make it a perfect circle
+        backgroundColor: '#feb248', // White color for the circle
+        top: -10, // Adjust top position
+        left: -300, // Adjust left position
+        zIndex: -1, // Ensure it's behind all other content
+    },
+    backgroundEllipse: {
+        position: 'absolute',
+        width: 400, // Width of the ellipse
+        height: 200, // Height of the ellipse
+        borderRadius: 100, // Half the height to make it an ellipse
+        backgroundColor: '#feb248', // Background color for the ellipse
+        bottom: -50, // Adjust bottom position
+        right: -200, // Adjust right position
+        zIndex: -1, // Ensure it's behind all other content
+      },
 });

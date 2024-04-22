@@ -38,8 +38,13 @@ export default function SurveyQuestions({ route }) {
     setSelectedContribution(contribution);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#FFDE59" }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
+
+
       <ScrollView style={styles.container}>
+      <View style={styles.backgroundCircle} />
+            <View style={styles.backgroundEllipse} />
+            {/* <View style={styles.secondBackgroundCircle} /> */}
         <Text style={styles.questionTitle}>
           1. What is your primary goal with investing?
         </Text>
@@ -89,7 +94,7 @@ export default function SurveyQuestions({ route }) {
         ))}
 
         <TouchableOpacity
-          style={{ backgroundColor: "#0077cc", padding: 10, borderRadius: 5, }}
+          style={{ backgroundColor: "#5748fe", padding: 20, marginTop: 20, borderRadius: 5, }}
           onPress={() =>
             navigation.navigate("InvestmentPlanScreen", {
               level: route.params.level,
@@ -99,7 +104,7 @@ export default function SurveyQuestions({ route }) {
             })
           }
         >
-          <Text style={{ color: "white", textAlign: "center" }}>Submit</Text>
+          <Text style={{ color: "white", textAlign: "center", fontFamily:'Poppins-Bold', fontSize:20 }}>Continue</Text>
         </TouchableOpacity>
       <View style={{ padding: insets.bottom }} />
       </ScrollView>
@@ -115,7 +120,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   questionTitle: {
-    fontSize: 18,
+    fontSize: 22,
+    fontFamily: "Poppins-Bold",
     marginVertical: 12,
   },
   option: {
@@ -124,12 +130,46 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 5,
+    backgroundColor: "#feb248",
   },
   selectedOption: {
-    backgroundColor: "#b4ffb8",
-    borderColor: "#0077cc",
+    backgroundColor: "#da7f00",
+    borderColor: "#da7f00",
   },
   optionText: {
-    fontSize: 16,
+    fontSize: 18,
+    fontFamily: "Poppins-Semibold",
+    color: "white",
   },
+  backgroundCircle: {
+    position: 'absolute',
+    width: 500, // Diameter of the circle
+    height: 300, // Diameter of the circle
+    borderRadius: 100, // Half the diameter to make it a perfect circle
+    backgroundColor: '#4894FE', // White color for the circle
+    top: -200, // Adjust top position
+    right: -300, // Adjust left position
+    zIndex: -1, // Ensure it's behind all other content
+},
+backgroundEllipse: {
+    position: 'absolute',
+    width: 400, // Width of the ellipse
+    height: 350, // Height of the ellipse
+    borderRadius: 500, // Half the height to make it an ellipse
+    backgroundColor: '#4894FE', // Background color for the ellipse
+    bottom: 75, // Adjust bottom position
+    left: -300, // Adjust right position
+    zIndex: -1, // Ensure it's behind all other content
+  },
+
+  // secondBackgroundCircle: {
+  //   position: 'absolute',
+  //   width: 500, // Diameter of the circle
+  //   height: 700, // Diameter of the circle
+  //   borderRadius: 500, // Half the diameter to make it a perfect circle
+  //   backgroundColor: '#4894FE', // White color for the circle
+  //   top: 200, // Adjust top position
+  //   left: -300, // Adjust left position
+  //   zIndex: -1, // Ensure it's behind all other content
+  // }
 });
