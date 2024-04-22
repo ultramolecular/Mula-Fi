@@ -28,7 +28,7 @@ def get_investment_feedback():
              f"has chosen is the following: {data['stocks']}% stocks, {data['bonds']}% bonds, {data['savings']}% savings. "\
              f"Simulate results for a 1-year period, 5-year period, and 10-year period using historic finance statistics, "\
              f"and then provide useful feedback as if you were an actual professional accountant for the user and their "\
-             f"investment plan based on their experience level ({data['experience']}). Speak in first-person and refer to the "\
+             f"investment plan based on their experience level ({data['experience']}). Speak in first-person, but refer to yourself as \"we\", not \"I\",  and refer to the "\
              f"user as 'you' to make it a more immersive experience for the user."
 
     response = client.chat.completions.create(
