@@ -2,6 +2,7 @@ import { View, Text, SafeAreaView, TouchableOpacity, StyleSheet, Image } from "r
 // @ts-ignore
 import React from "react";
 
+
 //@ts-ignore
 export default function StartScreen({ navigation }) {
     return (
@@ -22,7 +23,7 @@ export default function StartScreen({ navigation }) {
                       width: "80%",
                     }}
                 >
-                    <Text style={{ fontSize: 20, textAlign: "center", color:'white', padding: 10 }}>
+                    <Text style={{ fontSize: 20, textAlign: "center", color:'white', padding: 10, fontFamily:"Poppins-Regular" }}>
                         Please choose your experience level:
                     </Text>
                     {/* Novice button */}

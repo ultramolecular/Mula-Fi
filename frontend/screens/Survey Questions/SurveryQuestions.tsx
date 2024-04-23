@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
   },
   optionText: {
     fontSize: 18,
-    fontFamily: "Poppins-Semibold",
+    fontFamily: "Poppins-SemiBold",
     color: "white",
   },
   backgroundCircle: {

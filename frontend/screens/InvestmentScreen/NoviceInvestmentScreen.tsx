@@ -15,7 +15,8 @@ import Slider from "@react-native-community/slider";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { InvestmentScreenParams } from "../../App";
+import { InvestmentScreenParams } from "../../constants";
+import { apiURl } from "../../constants";
 
 export default function NoviceInvestmentScreen({
   route,
@@ -29,6 +30,8 @@ export default function NoviceInvestmentScreen({
   const [stocks, setStocks] = useState(40);
   const [bonds, setBonds] = useState(30);
   const [savings, setSavings] = useState(30);
+  const [submitting, setSubmitting] = useState(false); // State to track submission status
+
 
   //state for modals
 
@@ -62,19 +65,23 @@ export default function NoviceInvestmentScreen({
   );
 
   const handleSubmit = async () => {
+    setSubmitting(true);
     advice.refetch();
+    
   };
 
+
   useEffect(() => {
-    if (advice.isSuccess && advice.data) {
-      console.log("advice that is being passed: ", advice.data);
+    if (submitting && advice.isSuccess && advice.data && !advice.isFetching && !advice.isRefetching) {
       //@ts-ignore
       navigation.navigate("FeedbackScreen", {
         ...route.params,
         advice: advice.data,
       });
+      setSubmitting(false); // Reset submitting state after navigation
     }
-  }, [advice.isSuccess, advice.data, navigation]);
+  }, [submitting, advice.isSuccess, advice.data, navigation]);
+
 
   async function callApi() {
     try {
@@ -95,7 +102,7 @@ export default function NoviceInvestmentScreen({
       console.log(JSON.stringify(input));
 
       const response = await axios.post(
-        "http://127.0.0.1:5000/get-investment-feedback-novice",
+        `${apiURl}/get-investment-feedback-novice`,
         {
           ...input,
         }
@@ -104,12 +111,14 @@ export default function NoviceInvestmentScreen({
     } catch (error) {
       console.error("Failed to fetch investment advice:", error);
     }
+
   }
 
   if (advice.isLoading || advice.isFetching || advice.isRefetching) {
     return (
       <View style={styles.centeredLoading}>
-        <ActivityIndicator size="large" color="#307ecc" />
+        <Text style={styles.loadingText}>Hold Tight! We're generating your plan!</Text>
+        <ActivityIndicator size="large" color="#307ecc" style={{padding:10}} />
       </View>
     );
   }
@@ -246,12 +255,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#FFDE59",
+    backgroundColor: "white",
   },
   header: {
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 20,
+    padding:10,
     fontFamily: "Poppins-Bold",
     color: "white",
   },
@@ -261,7 +271,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 18,
-    fontFamily: "Poppins-Semibold",
+    fontFamily: "Poppins-SemiBold",
     marginBottom: 10,
     color: "white",
   },
@@ -336,6 +346,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontFamily: "Poppins-Regular",
     fontSize: 16,
+  },
+  loadingText :{
+    fontFamily: "Poppins-Bold",
+    fontSize: 30,
+    color: "#4894FE",
   },
   backgroundCircle: {
     position: "absolute",

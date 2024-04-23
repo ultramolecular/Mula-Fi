@@ -38,6 +38,7 @@ export default function FeedbackScreen({
             onPress={() =>
               //@ts-ignore
               navigation.goBack()
+
             }
           >
             <Text style={styles.editPlanText}>Edit my Plan</Text>

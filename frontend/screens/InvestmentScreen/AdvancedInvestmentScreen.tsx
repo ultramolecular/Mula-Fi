@@ -8,16 +8,18 @@ import {
   SafeAreaView,
   ActivityIndicator,
   Modal,
+  ScrollView
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import Slider from "@react-native-community/slider";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { InvestmentScreenParams } from "../../App";
-import { ScrollView } from "react-native-gesture-handler";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { InvestmentScreenParams } from "../../constants";
+import { apiURl } from "../../constants";
+
 
 export default function AdvancedInvestmentScreen({
   route,
@@ -41,6 +43,7 @@ export default function AdvancedInvestmentScreen({
   const [longTermCD, setLongTermCD] = useState<number>(10);
   const [shortTermCD, setShortTermCD] = useState<number>(10);
   const [savings, setSavings] = useState(5);
+  const [submitting, setSubmitting] = useState(false);
 
 
   //state for modals
@@ -101,19 +104,22 @@ export default function AdvancedInvestmentScreen({
   }, [ longTermBonds, shortTermBonds, savings, mutualFunds, individualStocks, shortTermCD, longTermCD]);
 
   const handleSubmit = async () => {
+    setSubmitting(true);
     advice.refetch();
+
   };
 
   useEffect(() => {
-    if (advice.isSuccess && advice.data) {
-      console.log("advice that is being passed: ", advice.data);
+    if (submitting && advice.isSuccess && advice.data && !advice.isFetching && !advice.isRefetching) {
       //@ts-ignore
       navigation.navigate("FeedbackScreen", {
         ...route.params,
         advice: advice.data,
       });
+      setSubmitting(false); // Reset submitting state after navigation
     }
-  }, [advice.isSuccess, advice.data, navigation]);
+  }, [submitting, advice.isSuccess, advice.data, navigation]);
+
 
   async function callApi() {
     try {
@@ -139,7 +145,7 @@ export default function AdvancedInvestmentScreen({
       console.log(JSON.stringify(input));
 
       const response = await axios.post(
-        "http://127.0.0.1:5000/get-investment-feedback-advanced",
+        `${apiURl}/get-investment-feedback-advanced`,
         {
           ...input,
         }
@@ -153,7 +159,8 @@ export default function AdvancedInvestmentScreen({
   if (advice.isLoading || advice.isFetching || advice.isRefetching) {
     return (
       <View style={styles.centeredLoading}>
-        <ActivityIndicator size="large" color="#307ecc" />
+        <Text style={styles.loadingText}>Hold Tight! We're generating your plan!</Text>
+        <ActivityIndicator size="large" color="#307ecc" style={{padding:10}} />
       </View>
     );
   }
@@ -416,7 +423,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#FFDE59",
+    backgroundColor: "white",
   },
   header: {
     fontSize: 24,
@@ -431,7 +438,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 18,
-    fontFamily: "Poppins-Semibold",
+    fontFamily: "Poppins-SemiBold",
     marginBottom: 10,
   },
   slider: {
@@ -529,9 +536,14 @@ const styles = StyleSheet.create({
   },
   subCategoryLabel: {
     fontSize: 18,
-    fontFamily: "Poppins-Semibold",
+    fontFamily: "Poppins-SemiBold",
     marginBottom: 10,
     color: "white",
+  },
+  loadingText :{
+    fontFamily: "Poppins-Bold",
+    fontSize: 30,
+    color: "#4894FE",
   },
   backgroundCircle: {
     position: "absolute",
