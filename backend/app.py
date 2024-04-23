@@ -28,8 +28,9 @@ def get_investment_feedback_novice():
         f"can contribute ${data['monthly_contribution']} monthly.\nThe prospective investment plan the user "
         f"has chosen is the following: {data['stocks']}% stocks, {data['bonds']}% bonds, {data['savings']}% savings. "
         f"Simulate results for a 1-year period, 5-year period, and 10-year period using historic finance statistics, "
-        f"and then provide useful feedback as if you were an actual professional accountant for the user and their "
-        f"investment plan based on their experience level ({data['experience']}). Speak in first-person, but refer to yourself as \"we\", not \"I\",  and refer to the "
+        f"and then provide useful feedback as if you were an actual professional financial assistant for the user and their "
+        f"investment plan based on their experience level ({data['experience']}). Be sure to be specific and use numbers/calculations when giving advice."
+        f"Speak in first-person, but refer to yourself as \"Mula-fi\", not \"I\",  and refer to the "
         f"user as 'you' to make it a more immersive experience for the user."
     )
 
@@ -52,8 +53,9 @@ def get_investment_feedback_intermediate():
         f"can contribute ${data['monthly_contribution']} monthly.\nThe prospective investment plan the user "
         f"has chosen is the following: {data['mutualFunds']}% mutualFunds, {data['individualStocks']}% individual stocks, {data['bonds']}% bonds, {data['savings']}% in savings(at a {data['interestRate']}% interest rate). "
         f"Simulate results for a 1-year period, 5-year period, and 10-year period using historic finance statistics, "
-        f"and then provide useful feedback as if you were an actual professional accountant for the user and their "
-        f"investment plan. Be sure to give specific advice, referring back to the percentages that the user inputted. Remember that the user is an intermediate investor - use language and terms that reflect that experience level. Speak in first-person, but refer to yourself as \"we\", not \"I\",  and refer to the "
+        f"and then provide useful feedback as if you were an actual professional professional financial assistant for the user and their "
+        f"investment plan. Be sure to give specific advice, referring back to the percentages that the user inputted, and adding appropriate calculations."
+         f"Remember that the user is an intermediate investor - use language and terms that reflect that experience level. Speak in first-person, but refer to yourself as \"Mula-fi\", not \"I\",  and refer to the "
         f"user as 'you' to make it a more immersive experience for the user."
     )
 
@@ -77,8 +79,9 @@ def get_investment_feedback_advanced():
         f"has chosen is the following: {data['mutualFunds']}% mutualFunds, {data['individualStocks']}% individual stocks, {data['shortTermBonds']}% short - term bonds, {data['longTermBonds']}% long - term bonds,"
         f"{data['savings']}% in savings(at a {data['interestRate']}% interest rate), {data['shortTermCD']}% short -term CD, {data['longTermCD']}% long - term CD. "
         f"Simulate results for a 1-year period, 5-year period, and 10-year period using historic finance statistics, "
-        f"and then provide useful feedback as if you were an actual professional accountant for the user and their "
-        f"investment plan. Be sure to give specific advice, referring back to the percentages that the user inputted. Remember that the user is an advanced investor - use language and terms that reflect that experience level.. Speak in first-person, but refer to yourself as \"we\", not \"I\",  and refer to the "
+        f"and then provide useful feedback as if you were an actual professional professional financial assistant for the user and their "
+        f"investment plan. Be sure to give specific advice, referring back to the percentages that the user inputted. Remember that the user is an advanced investor - use "
+        f"language and terms that reflect that experience level. Speak in first-person, but refer to yourself as \"Mula-fi\", not \"I\",  and refer to the "
         f"user as 'you' to make it a more immersive experience for the user."
     )
 

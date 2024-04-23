@@ -72,7 +72,7 @@ export default function NoviceInvestmentScreen({
 
 
   useEffect(() => {
-    if (submitting && advice.isSuccess && advice.data && !advice.isFetching && !advice.isRefetching) {
+    if (submitting && advice.isSuccess && advice.data && !advice.isFetching && advice.isRefetching) {
       //@ts-ignore
       navigation.navigate("FeedbackScreen", {
         ...route.params,
