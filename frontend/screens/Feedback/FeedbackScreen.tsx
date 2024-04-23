@@ -2,8 +2,9 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ScrollView } from "react-native-gesture-handler";
+import { InvestmentScreenParams } from "../../App";
 
-export default function FeedbackScreen({ route }) {
+export default function FeedbackScreen({ route }: { route: { params: InvestmentScreenParams } }) {
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
   const { advice } = route.params;
