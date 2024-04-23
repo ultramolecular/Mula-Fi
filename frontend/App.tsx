@@ -25,6 +25,10 @@ export interface InvestmentScreenParams {
   mutualFunds: number | undefined;
   individualStocks: number | undefined;
   interestRate: number | undefined;
+  shortTermCD: number | undefined;
+  longTermCD: number | undefined;
+  shortTermBonds: number | undefined;
+  longTermBonds: number | undefined;
 }
 
 export default function App() {
@@ -32,12 +36,12 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <SafeAreaProvider>
         <NavigationContainer>
-          <Stack.Navigator initialRouteName="OnboardingPages">
-            <Stack.Screen
+          <Stack.Navigator initialRouteName="StartScreen">
+            {/* <Stack.Screen
               name="OnboardingPages"
               component={OnboardingPages}
               options={{ headerShown: false }}
-            />
+            /> */}
             <Stack.Screen
               name="StartScreen"
               component={StartScreen}

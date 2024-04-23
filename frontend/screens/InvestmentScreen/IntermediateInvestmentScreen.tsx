@@ -113,7 +113,7 @@ export default function IntermediateInvestmentScreen({
       console.log(JSON.stringify(input));
 
       const response = await axios.post(
-        "http://127.0.0.1:5000/get-investment-feedback",
+        "http://127.0.0.1:5000/get-investment-feedback-intermediate",
         {
           ...input,
         }

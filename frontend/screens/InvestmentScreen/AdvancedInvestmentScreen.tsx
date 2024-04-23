@@ -16,6 +16,8 @@ import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { InvestmentScreenParams } from "../../App";
+import { ScrollView } from "react-native-gesture-handler";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function AdvancedInvestmentScreen({
   route,
@@ -25,14 +27,21 @@ export default function AdvancedInvestmentScreen({
   const navigation = useNavigation();
   const { level, goals, portfolioSize, monthlyContribution } = route.params;
 
+  const insets = useSafeAreaInsets();
+
+
   // State for input values
-  const [bonds, setBonds] = useState(30);
-  const [savings, setSavings] = useState(30);
 
   // Additional state for the new sliders
   const [mutualFunds, setMutualFunds] = useState(20);
   const [individualStocks, setIndividualStocks] = useState(20);
   const [interestRate, setInterestRate] = useState<number>(1.0);
+  const [shortTermBonds, setShortTermBonds] = useState<number>(15);
+  const [longTermBonds, setLongTermBonds] = useState<number>(15);
+  const [longTermCD, setLongTermCD] = useState<number>(10);
+  const [shortTermCD, setShortTermCD] = useState<number>(10);
+  const [savings, setSavings] = useState(5);
+
 
   //state for modals
 
@@ -45,7 +54,12 @@ export default function AdvancedInvestmentScreen({
     | "savings"
     | "mutualFunds"
     | "individualStocks"
-    | "interestRate";
+    | "interestRate"
+    | "shortTermBonds"
+    | "longTermBonds"
+    | "longTermCD"
+    | "shortTermCD";
+
   const showInfo = (type: InfoType) => {
     const messages = {
       stocks:
@@ -60,6 +74,14 @@ export default function AdvancedInvestmentScreen({
         "Individual stocks are equity investments that represent legal ownership in a company. This percentage represents the portion of your stock investments that are in individual stocks. For an intermediate investor, we will assume that your individual stocks are going to be selected from the most commonly held stocks. ",
       interestRate:
         "Interest rates are the amount charged, expressed as a percentage of principal, by a lender to a borrower for the use of assets. This percentage represents the average interest rate for your savings accounts.",
+      shortTermBonds:
+        "Short-term bonds are bonds that mature in less than five years. They are less sensitive to interest rate changes than long-term bonds. This percentage represents the portion of your bond investments that are in short-term bonds.",
+      longTermBonds:
+        "Long-term bonds are bonds that mature in more than five years. They are more sensitive to interest rate changes than short-term bonds. This percentage represents the portion of your bond investments that are in long-term bonds.",
+        longTermCD:
+        "CDs are time deposits that pay a fixed interest rate for a shorter period (6-12 months). This percentage represents the portion of your bond investments that are in long-term CDs.",
+        shortTermCD:
+        "CDs are time deposits that pay a fixed interest rate for a longer period (<12 months). This percentage represents the portion of your bond investments that are in short-term CDs.",
     };
     setModalContent(messages[type]);
     setModalVisible(true);
@@ -73,9 +95,10 @@ export default function AdvancedInvestmentScreen({
 
   // Calculate the total percentage
   const totalPercentage = useMemo(() => {
-    const totalInvestments = bonds + savings + mutualFunds + individualStocks;
+    const totalInvestments =
+      shortTermBonds + longTermBonds + savings + mutualFunds + individualStocks +shortTermCD + longTermCD;
     return totalInvestments;
-  }, [bonds, savings, mutualFunds, individualStocks]);
+  }, [ longTermBonds, shortTermBonds, savings, mutualFunds, individualStocks, shortTermCD, longTermCD]);
 
   const handleSubmit = async () => {
     advice.refetch();
@@ -102,18 +125,21 @@ export default function AdvancedInvestmentScreen({
         goals: goals,
         portfolio_size: portfolioSize,
         monthly_contribution: monthlyContribution,
-        bonds,
         savings,
         mutualFunds,
         individualStocks,
         interestRate,
+        shortTermBonds,
+        longTermBonds,
+        longTermCD,
+        shortTermCD,
       };
 
       // log input in json format
       console.log(JSON.stringify(input));
 
       const response = await axios.post(
-        "http://127.0.0.1:5000/get-investment-feedback",
+        "http://127.0.0.1:5000/get-investment-feedback-advanced",
         {
           ...input,
         }
@@ -139,169 +165,242 @@ export default function AdvancedInvestmentScreen({
     <SafeAreaView style={{ flex: 1, backgroundColor: "#feb248" }}>
       <View style={styles.backgroundCircle} />
       <View style={styles.backgroundEllipse} />
-      <View style={styles.container}>
-        <Text style={styles.header}>
-          Investment Template for Intermediate Investors
-        </Text>
-
-        <View style={styles.categoryContainer}>
-          <Text style={styles.categoryLabel}>
-            Stocks (%): {mutualFunds + individualStocks}
+      <ScrollView>
+        <View style={styles.container}>
+          <Text style={styles.header}>
+            Investment Template for Advanced Investors
           </Text>
 
-          <View style={styles.subCategoryContainer}>
-            <View style={styles.subCategoryLabelContainer}>
-              <Text style={styles.subCategoryLabel}>
-                Mutual Funds (%): {mutualFunds}
-              </Text>
-              <TouchableOpacity onPress={() => showInfo("mutualFunds")}>
-                <Icon name="info" size={20} color="#307ecc" />
-              </TouchableOpacity>
+          <View style={styles.categoryContainer}>
+            <Text style={styles.categoryLabel}>
+              Stocks (%): {mutualFunds + individualStocks}
+            </Text>
+
+            <View style={styles.subCategoryContainer}>
+              <View style={styles.subCategoryLabelContainer}>
+                <Text style={styles.subCategoryLabel}>
+                  Mutual Funds (%): {mutualFunds}
+                </Text>
+                <TouchableOpacity onPress={() => showInfo("mutualFunds")}>
+                  <Icon name="info" size={20} color="#307ecc" />
+                </TouchableOpacity>
+              </View>
+              <Slider
+                style={styles.slider}
+                minimumValue={0}
+                maximumValue={100} // Each can go up to 100 independently
+                step={1}
+                value={mutualFunds}
+                onValueChange={setMutualFunds}
+                minimumTrackTintColor="#307ecc"
+                maximumTrackTintColor="#000000"
+              />
             </View>
-            <Slider
-              style={styles.slider}
-              minimumValue={0}
-              maximumValue={100} // Each can go up to 100 independently
-              step={1}
-              value={mutualFunds}
-              onValueChange={setMutualFunds}
-              minimumTrackTintColor="#307ecc"
-              maximumTrackTintColor="#000000"
-            />
-          </View>
 
-          <View style={styles.subCategoryContainer}>
-            <View style={styles.subCategoryLabelContainer}>
-              <Text style={styles.subCategoryLabel}>
-                Individual Stocks (%): {individualStocks}
-              </Text>
-              <TouchableOpacity onPress={() => showInfo("individualStocks")}>
-                <Icon name="info" size={20} color="#307ecc" />
-              </TouchableOpacity>
+            <View style={styles.subCategoryContainer}>
+              <View style={styles.subCategoryLabelContainer}>
+                <Text style={styles.subCategoryLabel}>
+                  Individual Stocks (%): {individualStocks}
+                </Text>
+                <TouchableOpacity onPress={() => showInfo("individualStocks")}>
+                  <Icon name="info" size={20} color="#307ecc" />
+                </TouchableOpacity>
+              </View>
+              <Slider
+                style={styles.slider}
+                minimumValue={0}
+                maximumValue={100}
+                step={1}
+                value={individualStocks}
+                onValueChange={setIndividualStocks}
+                minimumTrackTintColor="#307ecc"
+                maximumTrackTintColor="#000000"
+              />
             </View>
-            <Slider
-              style={styles.slider}
-              minimumValue={0}
-              maximumValue={100}
-              step={1}
-              value={individualStocks}
-              onValueChange={setIndividualStocks}
-              minimumTrackTintColor="#307ecc"
-              maximumTrackTintColor="#000000"
-            />
           </View>
-        </View>
 
-        <View style={styles.sliderContainer}>
-          <View style={styles.labelContainer}>
-            <Text style={styles.categoryLabel}>Bonds (%): {bonds}</Text>
-            <TouchableOpacity onPress={() => showInfo("bonds")}>
-              <Icon name="info" size={24} color="#307ecc" />
-            </TouchableOpacity>
-          </View>
-          <Slider
-            style={styles.slider}
-            minimumValue={0}
-            maximumValue={100} // Each can go up to 100 independently
-            step={1}
-            value={bonds}
-            onValueChange={setBonds}
-            minimumTrackTintColor="#307ecc"
-            maximumTrackTintColor="#000000"
-          />
-        </View>
+          <View style={styles.categoryContainer}>
+            <Text style={styles.categoryLabel}>
+              Bonds (%): {shortTermBonds + longTermBonds}
+            </Text>
 
-        <View style={styles.categoryContainer}>
-          <Text style={styles.categoryLabel}>Savings (%): {savings}</Text>
-
-          <View style={styles.subCategoryContainer}>
-            <View style={styles.subCategoryLabelContainer}>
-              <Text style={styles.subCategoryLabel}>
-                Savings (%): {savings}
-              </Text>
-              <TouchableOpacity onPress={() => showInfo("savings")}>
-                <Icon name="info" size={20} color="#307ecc" />
-              </TouchableOpacity>
+            <View style={styles.subCategoryContainer}>
+              <View style={styles.subCategoryLabelContainer}>
+                <Text style={styles.subCategoryLabel}>
+                  Short-Term Bonds (%): {shortTermBonds}
+                </Text>
+                <TouchableOpacity onPress={() => showInfo("shortTermBonds")}>
+                  <Icon name="info" size={20} color="#307ecc" />
+                </TouchableOpacity>
+              </View>
+              <Slider
+                style={styles.slider}
+                minimumValue={0}
+                maximumValue={100} // Each can go up to 100 independently
+                step={1}
+                value={shortTermBonds}
+                onValueChange={setShortTermBonds}
+                minimumTrackTintColor="#307ecc"
+                maximumTrackTintColor="#000000"
+              />
             </View>
-            <Slider
-              style={styles.slider}
-              minimumValue={0}
-              maximumValue={100}
-              step={1}
-              value={savings}
-              onValueChange={setSavings}
-              minimumTrackTintColor="#307ecc"
-              maximumTrackTintColor="#000000"
-            />
-          </View>
 
-          <View style={styles.subCategoryContainer}>
-            <View style={styles.subCategoryLabelContainer}>
-              <Text style={styles.subCategoryLabel}>
-                Interest Rate (%): {interestRate.toFixed(2)}
-              </Text>
-              <TouchableOpacity onPress={() => showInfo("interestRate")}>
-                <Icon name="info" size={20} color="#307ecc" />
-              </TouchableOpacity>
+            <View style={styles.subCategoryContainer}>
+              <View style={styles.subCategoryLabelContainer}>
+                <Text style={styles.subCategoryLabel}>
+                  Long-Term Bonds (%): {longTermBonds}
+                </Text>
+                <TouchableOpacity onPress={() => showInfo("longTermBonds")}>
+                  <Icon name="info" size={20} color="#307ecc" />
+                </TouchableOpacity>
+              </View>
+              <Slider
+                style={styles.slider}
+                minimumValue={0}
+                maximumValue={100}
+                step={1}
+                value={longTermBonds}
+                onValueChange={setLongTermBonds}
+                minimumTrackTintColor="#307ecc"
+                maximumTrackTintColor="#000000"
+              />
             </View>
-            <Slider
-              style={styles.slider}
-              minimumValue={0}
-              maximumValue={10}
-              step={0.01}
-              value={interestRate}
-              onValueChange={setInterestRate}
-              minimumTrackTintColor="#307ecc"
-              maximumTrackTintColor="#000000"
-            />
           </View>
-        </View>
-        <View  style={{flexDirection:"row"}}>
-          <Text style={styles.totalLabel}> Total: </Text>
 
-          <Text
+          <View style={styles.categoryContainer}>
+            <Text style={styles.categoryLabel}>Savings (%): {savings + shortTermCD + longTermCD}</Text>
+
+            <View style={styles.subCategoryContainer}>
+              <View style={styles.subCategoryLabelContainer}>
+                <Text style={styles.subCategoryLabel}>
+                  Savings (%): {savings}
+                </Text>
+                <TouchableOpacity onPress={() => showInfo("savings")}>
+                  <Icon name="info" size={20} color="#307ecc" />
+                </TouchableOpacity>
+              </View>
+              <Slider
+                style={styles.slider}
+                minimumValue={0}
+                maximumValue={100}
+                step={1}
+                value={savings}
+                onValueChange={setSavings}
+                minimumTrackTintColor="#307ecc"
+                maximumTrackTintColor="#000000"
+              />
+            </View>
+
+            <View style={[styles.subCategoryContainer, {width: '80%', marginLeft:'20%'}]}>
+              <View style={styles.subCategoryLabelContainer}>
+                <Text style={styles.subCategoryLabel}>
+                  Interest Rate (%): {interestRate.toFixed(2)}
+                </Text>
+                <TouchableOpacity onPress={() => showInfo("interestRate")}>
+                  <Icon name="info" size={20} color="#307ecc" />
+                </TouchableOpacity>
+              </View>
+              <Slider
+                style={styles.slider}
+                minimumValue={0}
+                maximumValue={10}
+                step={0.01}
+                value={interestRate}
+                onValueChange={setInterestRate}
+                minimumTrackTintColor="#307ecc"
+                maximumTrackTintColor="#000000"
+              />
+            </View>
+
+
+            <View style={styles.subCategoryContainer}>
+              <View style={styles.subCategoryLabelContainer}>
+                <Text style={styles.subCategoryLabel}>
+                  CD (long term) (%): {longTermCD}
+                </Text>
+                <TouchableOpacity onPress={() => showInfo("longTermCD")}>
+                  <Icon name="info" size={20} color="#307ecc" />
+                </TouchableOpacity>
+              </View>
+              <Slider
+                style={styles.slider}
+                minimumValue={0}
+                maximumValue={100}
+                step={1}
+                value={longTermCD}
+                onValueChange={setLongTermCD}
+                minimumTrackTintColor="#307ecc"
+                maximumTrackTintColor="#000000"
+              />
+            </View>
+            <View style={styles.subCategoryContainer}>
+              <View style={styles.subCategoryLabelContainer}>
+                <Text style={styles.subCategoryLabel}>
+                  Cd (Short Term) (%): {shortTermCD}
+                </Text>
+                <TouchableOpacity onPress={() => showInfo("shortTermCD")}>
+                  <Icon name="info" size={20} color="#307ecc" />
+                </TouchableOpacity>
+              </View>
+              <Slider
+                style={styles.slider}
+                minimumValue={0}
+                maximumValue={100}
+                step={1}
+                value={shortTermCD}
+                onValueChange={setShortTermCD}
+                minimumTrackTintColor="#307ecc"
+                maximumTrackTintColor="#000000"
+              />
+            </View>
+          </View>
+          <View style={{ flexDirection: "row" }}>
+            <Text style={styles.totalLabel}> Total: </Text>
+
+            <Text
+              style={[
+                styles.totalLabel,
+                { color: totalPercentage === 100 ? "white" : "#cc0000" },
+              ]}
+            >
+              {totalPercentage}%
+            </Text>
+          </View>
+          <TouchableOpacity
             style={[
-              styles.totalLabel,
-              { color: totalPercentage === 100 ? "white" : "#cc0000" },
+              styles.submitButton,
+              totalPercentage === 100
+                ? styles.activeButton
+                : styles.disabledButton,
             ]}
+            onPress={handleSubmit}
+            disabled={totalPercentage !== 100}
           >
-            {totalPercentage}%
-          </Text>
-        </View>
-        <TouchableOpacity
-          style={[
-            styles.submitButton,
-            totalPercentage === 100
-              ? styles.activeButton
-              : styles.disabledButton,
-          ]}
-          onPress={handleSubmit}
-          disabled={totalPercentage !== 100}
-        >
-          <Text style={styles.submitButtonText}>Submit</Text>
-        </TouchableOpacity>
+            <Text style={styles.submitButtonText}>Submit</Text>
+          </TouchableOpacity>
 
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            setModalVisible(!modalVisible);
-          }}
-        >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Text style={styles.modalText}>{modalContent}</Text>
-              <TouchableOpacity
-                style={[styles.button, styles.buttonClose]}
-                onPress={() => setModalVisible(!modalVisible)}
-              >
-                <Text style={styles.textStyle}>Close</Text>
-              </TouchableOpacity>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+              setModalVisible(!modalVisible);
+            }}
+          >
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <Text style={styles.modalText}>{modalContent}</Text>
+                <TouchableOpacity
+                  style={[styles.button, styles.buttonClose]}
+                  onPress={() => setModalVisible(!modalVisible)}
+                >
+                  <Text style={styles.textStyle}>Close</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
-        </Modal>
-      </View>
+          </Modal>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }

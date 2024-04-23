@@ -17,7 +17,11 @@ import { useQuery } from "@tanstack/react-query";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { InvestmentScreenParams } from "../../App";
 
-export default function NoviceInvestmentScreen({ route }: { route: { params: InvestmentScreenParams } }) {
+export default function NoviceInvestmentScreen({
+  route,
+}: {
+  route: { params: InvestmentScreenParams };
+}) {
   const navigation = useNavigation();
   const { level, goals, portfolioSize, monthlyContribution } = route.params;
 
@@ -91,7 +95,7 @@ export default function NoviceInvestmentScreen({ route }: { route: { params: Inv
       console.log(JSON.stringify(input));
 
       const response = await axios.post(
-        "http://127.0.0.1:5000/get-investment-feedback",
+        "http://127.0.0.1:5000/get-investment-feedback-novice",
         {
           ...input,
         }
@@ -119,7 +123,8 @@ export default function NoviceInvestmentScreen({ route }: { route: { params: Inv
       <View style={styles.backgroundEllipse} />
       <View style={styles.container}>
         <Text style={styles.header}>Investment template for novices</Text>
-
+        
+        {/* Stocks Slider */}
         <View style={styles.sliderContainer}>
           <View style={styles.labelContainer}>
             <Text style={styles.label}>Stocks (%): {stocks}</Text>
@@ -127,7 +132,6 @@ export default function NoviceInvestmentScreen({ route }: { route: { params: Inv
               <Icon name="info" size={24} color="#307ecc" />
             </TouchableOpacity>
           </View>
-
           <Slider
             style={styles.slider}
             minimumValue={0}
@@ -139,6 +143,8 @@ export default function NoviceInvestmentScreen({ route }: { route: { params: Inv
             maximumTrackTintColor="#000000"
           />
         </View>
+  
+        {/* Bonds Slider */}
         <View style={styles.sliderContainer}>
           <View style={styles.labelContainer}>
             <Text style={styles.label}>Bonds (%): {bonds}</Text>
@@ -157,7 +163,8 @@ export default function NoviceInvestmentScreen({ route }: { route: { params: Inv
             maximumTrackTintColor="#000000"
           />
         </View>
-
+  
+        {/* Savings Slider */}
         <View style={styles.sliderContainer}>
           <View style={styles.labelContainer}>
             <Text style={styles.label}>Savings (%): {savings}</Text>
@@ -176,10 +183,10 @@ export default function NoviceInvestmentScreen({ route }: { route: { params: Inv
             maximumTrackTintColor="#000000"
           />
         </View>
-
-        <View  style={{flexDirection:"row"}}>
-          <Text style={styles.totalLabel}> Total: </Text>
-
+  
+        {/* Total Percentage Display */}
+        <View style={{ flexDirection: "row" }}>
+          <Text style={styles.totalLabel}>Total: </Text>
           <Text
             style={[
               styles.totalLabel,
@@ -188,7 +195,10 @@ export default function NoviceInvestmentScreen({ route }: { route: { params: Inv
           >
             {totalPercentage}%
           </Text>
-        </View>        <TouchableOpacity
+        </View>
+        
+        {/* Submit Button */}
+        <TouchableOpacity
           style={[
             styles.submitButton,
             totalPercentage === 100
@@ -200,14 +210,13 @@ export default function NoviceInvestmentScreen({ route }: { route: { params: Inv
         >
           <Text style={styles.submitButtonText}>Submit</Text>
         </TouchableOpacity>
-
+  
+        {/* Modal for Information */}
         <Modal
           animationType="slide"
           transparent={true}
           visible={modalVisible}
-          onRequestClose={() => {
-            setModalVisible(!modalVisible);
-          }}
+          onRequestClose={() => setModalVisible(!modalVisible)}
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
@@ -244,7 +253,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 20,
     fontFamily: "Poppins-Bold",
-    color: 'white'
+    color: "white",
   },
   sliderContainer: {
     width: "100%",
@@ -254,8 +263,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: "Poppins-Semibold",
     marginBottom: 10,
-    color: 'white'
-
+    color: "white",
   },
   slider: {
     width: "100%",
@@ -265,8 +273,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     marginTop: 20,
     fontFamily: "Poppins-ExtraBold",
-    color: 'white'
-
+    color: "white",
   },
   submitButton: {
     marginTop: 20,
